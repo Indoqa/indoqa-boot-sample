@@ -28,7 +28,10 @@
   <groupId>com.indoqa.boot.sample</groupId>
   <artifactId>indoqa-boot-sample</artifactId>
   <version>0.4.2-SNAPSHOT</version>
+
   <name>Indoqa Boot Sample</name>
+  <url>https://github.com/indoqa/indoqa-boot-sample</url>
+  <description>A sample using Indoqa Boot - https://github.com/Indoqa/indoqa-boot</description>  
   <inceptionYear>2016</inceptionYear>
 
   <scm>
@@ -50,21 +53,35 @@
   </properties>
 
   <dependencies>
-    <!-- Indoqa Boot -->
+    <!--
+       Indoqa Boot: By depending on the Indoqa Boot library all necessary dependencies of Spring, Javaspark and Jackson are  
+       pulled transitively.
+    -->
     <dependency>
       <groupId>com.indoqa</groupId>
       <artifactId>indoqa-boot</artifactId>
       <version>${indoqa-boot-version}</version>
     </dependency>
     
-    <!-- Jar-in-Jar -->
+    <!-- 
+      Jar-in-Jar: This runtime dependency is used by the assembly to create a single Jar application. See src/assemly/runnable.xml
+      and the configuration of the assembly plugin below. 
+    -->
     <dependency>
       <groupId>com.indoqa</groupId>
       <artifactId>jar-in-jar</artifactId>
       <version>${indoqa-jar-in-jar-version}</version>
       <scope>runtime</scope>
     </dependency>    
-
+    
+    <!-- 
+    
+      This application uses SLF4J as logging API and log4j2 as logging implementation. 
+      Since Spring still uses Apache Commons Logging, the jcl-over-slf4j bridging library needs to be available and the
+      version '99.0-does-not-exist' of Commons Logging is used in order to avoid any conflicts.
+    
+    -->
+    
     <!-- Logging: SLF4J -->
     <dependency>
       <groupId>org.slf4j</groupId>
@@ -117,7 +134,7 @@
 
   <dependencyManagement>
     <dependencies>
-      <!-- Spring Framework -->
+      <!-- Spring Framework: set the version of all Spring dependencies. -->
       <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>spring-framework-bom</artifactId>
@@ -141,6 +158,7 @@
               <mainClass>com.indoqa.jarinjar.Main</mainClass>
             </manifest>
             <manifestEntries>
+              <!-- com.indoqa.jarinjar.Main delegates to the application main class. -->
               <delegatedMainClass>com.indoqa.boot.sample.IndoqaBootSample</delegatedMainClass>
             </manifestEntries>
           </archive>

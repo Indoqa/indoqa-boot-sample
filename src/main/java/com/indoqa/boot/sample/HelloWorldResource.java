@@ -22,23 +22,39 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.indoqa.boot.AbstractJsonResourcesBase;
 
+/**
+ * All resources are implemented as Spring beans so that they can get access to other Spring beans by using the @Inject annotation.
+ */
 @Named
 public class HelloWorldResource extends AbstractJsonResourcesBase {
 
     @Inject
     private DateService dateService;
 
+    /**
+     * Register the Spark routes with Spark. The {@link AbstractJsonResourcesBase} provides helper methods that use a Json renderer
+     * based on Jackson 2.
+     * 
+     * See http://sparkjava.com/documentation.html for more details on how to use JavaSpark.
+     */
     @PostConstruct
     public void mount() {
         this.get("/", (req, res) -> new Message("Hello, world!", this.dateService.getDate()));
     }
 
+    /**
+     * This class is used by the route definition above. Of course the Jackson databind annotations can be used.
+     */
     public static class Message {
 
         private final String value;
         private final Date date;
+
+        @JsonIgnore
+        private final String otherValue = "other value which will be ignored by Jackson";
 
         public Message(String value, Date date) {
             this.value = value;
@@ -47,6 +63,10 @@ public class HelloWorldResource extends AbstractJsonResourcesBase {
 
         public Date getDate() {
             return this.date;
+        }
+
+        public String getOtherValue() {
+            return this.otherValue;
         }
 
         public String getValue() {

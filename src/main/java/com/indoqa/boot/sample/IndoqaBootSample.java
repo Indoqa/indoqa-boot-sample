@@ -18,6 +18,14 @@ package com.indoqa.boot.sample;
 
 import com.indoqa.boot.AbstractIndoqaBootApplication;
 
+/**
+ * In the simplest use case an Indoqa Boot application extends the {@link AbstractIndoqaBootApplication} class. Its method
+ * {@link #invoke()} is usually called within the {@link #main(String[])} method. (Note: See the assembly plugin which is also
+ * responsible for creating the jar's manifest file.).
+ * 
+ * Further methods can be overridden to hook into the initialization process of the Indoqa Boot application or to override its
+ * defaults.
+ */
 public class IndoqaBootSample extends AbstractIndoqaBootApplication {
 
     public static void main(String[] args) {
