@@ -25,6 +25,9 @@ import javax.inject.Named;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.indoqa.boot.AbstractJsonResourcesBase;
 
+import spark.Response;
+import spark.Spark;
+
 /**
  * All resources are implemented as Spring beans so that they can get access to other Spring beans by using the @Inject annotation.
  */
@@ -36,13 +39,23 @@ public class HelloWorldResource extends AbstractJsonResourcesBase {
 
     /**
      * Register the Spark routes with Spark. The {@link AbstractJsonResourcesBase} provides helper methods that use a Json renderer
-     * based on Jackson 2.
+     * based on Jackson 2. Of course the standard methods provided by Spark can be used too - see the /plain-text-message resource.
+     * 
+     * Note that Indoqa Boot sets application/json as default content type if the content type is not set explicitly at the response
+     * object.
      * 
      * See http://sparkjava.com/documentation.html for more details on how to use JavaSpark.
      */
     @PostConstruct
     public void mount() {
         this.get("/", (req, res) -> new Message("Hello, world!", this.dateService.getDate()));
+
+        Spark.get("/plain-text-message", (req, res) -> this.writePlainTextMessage(res));
+    }
+
+    private String writePlainTextMessage(Response res) {
+        res.type("text/plain");
+        return "Hello, world!";
     }
 
     /**
